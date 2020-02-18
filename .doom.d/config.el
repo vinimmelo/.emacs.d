@@ -4,7 +4,7 @@
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
 ;; Shortcuts or global keys
-(map! [f8] #'neotree-toggle)
+(map! [f8] #'neotree)
 (map! [f9] #'wttrin)
 (setq doom-localleader-key ",")
 
@@ -16,20 +16,22 @@
 (setq org-log-done 'time)
 
 ;; Theme
-(setq doom-theme 'doom-tomorrow-night)
-;; (setq doom-theme 'doom-molokai)
+;; (setq doom-theme 'doom-tomorrow-night)
+;; (setq doom-theme 'doom-tomorrow-day)
+;; (setq doom-theme 'doom-challenger-deep)
+(setq doom-theme 'doom-solarized-light)
 
 (require 'powerline)
 (show-paren-mode t)
 (setq show-paren-style 'expression)
 
 ;; Personal Configurations
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type 'relative)
 (setq wttrin-default-cities '("Florianópolis" "São Paulo" "Ribeirão Preto"))
 
 ;; Avy specifics
 (map! [f5] #'avy-goto-char-2)
-(map! "C-;" #'avy-goto-char-2)
+(map! "C-c ;" #'avy-goto-char-2)
 
 ;; Go Specifics language
 (add-to-list 'exec-path "/user/local/go/bin")
@@ -47,7 +49,7 @@
 
 ;; Set Font
 ;; (setq doom-font (font-spec :family "Hack" :size 16))
-(setq doom-font (font-spec :family "JetBrains Mono" :size 18))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 16))
 
 (custom-set-variables
  '(org-directory "~/Documents")
@@ -116,10 +118,10 @@
 (setq doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
 
 ;; Whether display the buffer encoding.
-(setq doom-modeline-buffer-encoding t)
+(setq doom-modeline-buffer-encoding nil)
 
 ;; Whether display the indentation information.
-(setq doom-modeline-indent-info t)
+(setq doom-modeline-indent-info nil)
 
 ;; If non-nil, only display one number for checker information if applicable.
 (setq doom-modeline-checker-simple-format t)
@@ -139,13 +141,13 @@
 ;; Whether display the `lsp' state. Non-nil to display in mode-line.
 (setq doom-modeline-lsp t)
 ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
-(setq doom-modeline-modal-icon t)
+(setq doom-modeline-modal-icon nil)
 
 ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
 (setq doom-modeline-mu4e nil)
 
 ;; Whether display the gnus notifications.
-(setq doom-modeline-gnus t)
+(setq doom-modeline-gnus nil)
 
 ;; Wheter gnus should automatically be updated and how often (set to nil to disable)
 (setq doom-modeline-gnus-timer 2)
@@ -154,7 +156,7 @@
 (setq doom-modeline-irc-stylize 'identity)
 
 ;; Whether display the environment version.
-(setq doom-modeline-env-version t)
+(setq doom-modeline-env-version nil)
 ;; Change the executables to use for the language version string
 (setq doom-modeline-env-python-executable "python3") ; or `python-shell-interpreter'
 (setq doom-modeline-env-ruby-executable "ruby")
@@ -166,23 +168,9 @@
 (after! doom-themes
   (remove-hook 'doom-load-theme-hook #'doom-themes-neotree-config))
 
-;; Centaur Tabs
-;; (setq centaur-tabs-style "rounded")
-;; (setq centaur-tabs-set-icons t)
-;; (setq centaur-tabs-set-bar 'under)
-;; (setq centaur-tabs-height 32)
-;; (setq centaur-tabs-gray-out-icons 'buffer)
-;; (map! "C-c t t" #'centaur-tabs-group-by-projectile-project)
-;; (map! "C-c t g" #'centaur-tabs-group-buffer-groups)
-
 ;; Fix undo tree problems with cache
 (global-undo-tree-mode -1)
 
-;; Global return
-(global-set-key (kbd "<C-return>") (lambda ()
-                   (interactive)
-                   (end-of-line)
-                   (newline-and-indent)))
-
 ;; Always use dired
 (map! "C-x C-d" #'dired)
+(map! "C-x d" #'dired)

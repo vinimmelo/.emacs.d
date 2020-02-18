@@ -32,3 +32,8 @@
 (package! js2-mode)
 (package! js2-refactor)
 (package! flymake-jslint)
+(package! pacmacs)
+(package! minesweeper)
+(package! treemacs-icons-dired)
+(package! treemacs-magit)
+(package! treemacs-projectile)

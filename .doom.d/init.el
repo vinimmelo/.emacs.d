@@ -13,40 +13,40 @@
        ;;japanese
 
        :completion
-       ;; company           ; the ultimate code completion backend
-       helm              ; the *other* search engine for love and life
+       (company +childframe)           ; the ultimate code completion backend
+       ;; (helm +fuzzy +childframe)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ;; ivy               ; a search engine for love and life
+       (ivy +fuzzy +childframe +prescient +icons)               ; a search engine for love and life
 
        :ui
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;fill-column       ; a `fill-column' indicator
+       fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;; hydra
        ;; indent-guides     ; highlighted indent columns
        modeline          ; snazzy, Atom-inspired modeline, plus API
-       ;; nav-flash         ; blink the current line after jumping
+       nav-flash         ; blink the current line after jumping
        neotree           ; a project drawer, like NERDTree for vim
-       ;; ophints           ; highlight the region an operation acts on
+       ophints           ; highlight the region an operation acts on
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        ;; pretty-code       ; replace bits of code with pretty symbols
        ;; tabs              ; an tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
+       ;; treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        ;; vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       ;; window-select     ; visually switch windows
+       window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
        zen
 
        :checkers
-       syntax
-       spell
+       (syntax +childframe)
+       ;; (spell +everywhere)
 
        :editor
        ;; (evil +everywhere); come to the dark side, we have cookies
@@ -78,10 +78,10 @@
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        direnv
-       docker
+       (docker +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
-       (eval +overlay)     ; run code, run (also, repls)
+       ;; (eval +overlay)     ; run code, run (also, repls)
        ;; flycheck          ; tasing you for every semicolon you forget
        ;; (flyspell +everywhere)          ; tasing you for misspelling mispelling
        gist              ; interacting with github gists
@@ -98,7 +98,7 @@
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
-       ;;wakatime
+       ;; wakatime
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -117,7 +117,7 @@
        ;;ess               ; emacs speaks statistics
        ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
-       go                ; the hipster dialect
+       (go +lsp)                ; the hipster dialect
        ;;(haskell +intero) ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
@@ -138,7 +138,7 @@
         ;;+hugo            ; use Emacs for hugo blogging
         +ipython         ; ipython/jupyter support for babel
         +pandoc          ; export-with-pandoc support
-        ;;+pomodoro        ; be fruitful with the tomato technique
+        +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
@@ -155,8 +155,8 @@
        ;;scheme            ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
-       ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
+       ;;swift             ; who asked for emoji variables?
        (web +lsp)               ; the tubes
 
        :email
@@ -169,7 +169,7 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        twitter           ; twitter client https://twitter.com/vnought
-       write             ; emacs for writers (fiction, notes, papers, etc.)
+       ;; write             ; emacs for writers (fiction, notes, papers, etc.)
 
        :config
        ;;literate
