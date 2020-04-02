@@ -9,7 +9,7 @@
 (package! doom-themes)
 (package! py-autopep8)
 (package! elpy)
-(package! org-bullets)
+(package! org-superstar)
 (package! org-super-agenda)
 (package! moe-theme)
 (package! all-the-icons)
@@ -37,3 +37,4 @@
 (package! treemacs-icons-dired)
 (package! treemacs-magit)
 (package! treemacs-projectile)
+(package! evil-multiedit)

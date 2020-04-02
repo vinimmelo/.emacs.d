@@ -4,7 +4,7 @@
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
 ;; Shortcuts or global keys
-(map! [f8] #'neotree)
+(map! [f8] #'neotree-toggle)
 (map! [f9] #'wttrin)
 (setq doom-localleader-key ",")
 
@@ -17,9 +17,10 @@
 
 ;; Theme
 ;; (setq doom-theme 'doom-tomorrow-night)
-;; (setq doom-theme 'doom-tomorrow-day)
+(setq doom-theme 'doom-molokai)
+;; (setq doom-theme 'doom-solarized-light)
 ;; (setq doom-theme 'doom-challenger-deep)
-(setq doom-theme 'doom-solarized-light)
+;; (setq doom-theme 'doom-material)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -32,6 +33,7 @@
 ;; Avy specifics
 (map! [f5] #'avy-goto-char-2)
 (map! "C-c ;" #'avy-goto-char-2)
+(map! "C-c ." #'avy-goto-char)
 
 ;; Go Specifics language
 (add-to-list 'exec-path "/user/local/go/bin")
@@ -82,7 +84,7 @@
 ;; You can specify one if you encounter the issue.
 (setq doom-modeline-project-detection 'project)
 ;; Please refer to https://github.com/bbatsov/projectile/issues/657.
-(setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
+(setq doom-modeline-buffer-file-name-style 'truncate-all)
 
 ;; Whether display icons in mode-line. Respects `all-the-icons-color-icons'.
 ;; While using the server mode in GUI, should set the value explicitly.
@@ -124,22 +126,22 @@
 (setq doom-modeline-indent-info nil)
 
 ;; If non-nil, only display one number for checker information if applicable.
-(setq doom-modeline-checker-simple-format t)
+(setq doom-modeline-checker-simple-format nil)
 
 ;; The maximum number displayed for notifications.
-(setq doom-modeline-number-limit 99)
+(setq doom-modeline-number-limit 20)
 
 ;; The maximum displayed length of the branch name of version control.
-(setq doom-modeline-vcs-max-length 12)
+(setq doom-modeline-vcs-max-length 10)
 
 ;; Whether display the perspective name. Non-nil to display in mode-line.
-(setq doom-modeline-persp-name t)
+(setq doom-modeline-persp-name nil)
 
 ;; If non nil the default perspective name is displayed in the mode-line.
 (setq doom-modeline-display-default-persp-name nil)
 
 ;; Whether display the `lsp' state. Non-nil to display in mode-line.
-(setq doom-modeline-lsp t)
+(setq doom-modeline-lsp nil)
 ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
 (setq doom-modeline-modal-icon nil)
 
@@ -162,7 +164,6 @@
 (setq doom-modeline-env-ruby-executable "ruby")
 (setq doom-modeline-env-perl-executable "perl")
 (setq doom-modeline-env-go-executable "go")
-(setq doom-modeline-env-load-string "...")
 
 ;; Hooks
 (after! doom-themes
@@ -174,3 +175,123 @@
 ;; Always use dired
 (map! "C-x C-d" #'dired)
 (map! "C-x d" #'dired)
+
+
+;; Hydras
+
+(global-set-key
+ (kbd "C-ç")
+ (defhydra hydra-avy (:exit t :hint nil)
+  "
+ Line^^       Region^^        Goto
+----------------------------------------------------------
+ [_y_] yank   [_Y_] yank      [_c_] char 2      [_C_] char
+ [_m_] move   [_M_] move      [_w_] word        [_W_] any word
+ [_k_] kill   [_K_] kill      [_l_] line        [_L_] end of line"
+  ("c" avy-goto-char-2)
+  ("C" avy-goto-char)
+  ("w" avy-goto-word-1)
+  ("W" avy-goto-word-0)
+  ("l" avy-goto-line)
+  ("L" avy-goto-end-of-line)
+  ("m" avy-move-line)
+  ("M" avy-move-region)
+  ("k" avy-kill-whole-line)
+  ("K" avy-kill-region)
+  ("y" avy-copy-line)
+  ("Y" avy-copy-region))
+)
+
+
+(defhydra hydra-projectile-other-window (:color teal)
+  "projectile-other-window"
+  ("f"  projectile-find-file-other-window        "file")
+  ("g"  projectile-find-file-dwim-other-window   "file dwim")
+  ("d"  projectile-find-dir-other-window         "dir")
+  ("b"  projectile-switch-to-buffer-other-window "buffer")
+  ("q"  nil                                      "cancel" :color blue))
+
+
+(global-set-key
+ (kbd "M-p")
+(defhydra hydra-projectile (:color teal
+                            :hint nil)
+  "
+     PROJECTILE: %(projectile-project-root)
+
+     Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+_s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+ _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+ _fd_: file curr dir   _o_: multi-occur     _s-k_: Kill all buffers  _X_: cleanup non-existing
+  _r_: recent file                                               ^^^^_z_: cache current
+  _d_: dir
+
+"
+  ("a"   projectile-ag)
+  ("b"   projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   projectile-find-dir)
+  ("s-f" projectile-find-file)
+  ("ff"  projectile-find-file-dwim)
+  ("fd"  projectile-find-file-in-directory)
+  ("g"   ggtags-update-tags)
+  ("s-g" ggtags-update-tags)
+  ("i"   projectile-ibuffer)
+  ("K"   projectile-kill-buffers)
+  ("s-k" projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("o"   projectile-multi-occur)
+  ("s-p" projectile-switch-project "switch project")
+  ("p"   projectile-switch-project)
+  ("s"   projectile-switch-project)
+  ("r"   projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("`"   hydra-projectile-other-window/body "other window")
+  ("q"   nil "cancel" :color blue))
+)
+
+(defhydra hydra-buffer-menu (:color pink
+                             :hint nil)
+  "
+^Mark^             ^Unmark^           ^Actions^          ^Search
+^^^^^^^^-----------------------------------------------------------------
+_m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+_s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+_d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+_D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+_~_: modified
+"
+  ("m" Buffer-menu-mark)
+  ("u" Buffer-menu-unmark)
+  ("U" Buffer-menu-backup-unmark)
+  ("d" Buffer-menu-delete)
+  ("D" Buffer-menu-delete-backwards)
+  ("s" Buffer-menu-save)
+  ("~" Buffer-menu-not-modified)
+  ("x" Buffer-menu-execute)
+  ("b" Buffer-menu-bury)
+  ("g" revert-buffer)
+  ("T" Buffer-menu-toggle-files-only)
+  ("O" Buffer-menu-multi-occur :color blue)
+  ("I" Buffer-menu-isearch-buffers :color blue)
+  ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+  ("c" nil "cancel")
+  ("v" Buffer-menu-select "select" :color blue)
+  ("o" Buffer-menu-other-window "other-window" :color blue)
+  ("q" quit-window "quit" :color blue))
+
+(define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+
+;; Display Time
+(display-time-mode 1)
+(setq display-time-24hr-format t)
+
+;; Lsp Performance Improvement
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
+(setq lsp-prefer-capf t)
+(setq lsp-ui-doc-enable nil)
