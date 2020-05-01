@@ -7,9 +7,11 @@
 (map! [f8] #'neotree-toggle)
 (map! [f9] #'wttrin)
 (setq doom-localleader-key ",")
+(map! "C-s" #'swiper-isearch)
 
 ;; Python config
 (elpy-enable)
+(setq elpy-rpc-python-command "python3")
 
 ;; Org Config
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -17,10 +19,13 @@
 
 ;; Theme
 ;; (setq doom-theme 'doom-tomorrow-night)
-(setq doom-theme 'doom-molokai)
+;; (setq doom-theme 'doom-horizon)
 ;; (setq doom-theme 'doom-solarized-light)
 ;; (setq doom-theme 'doom-challenger-deep)
 ;; (setq doom-theme 'doom-material)
+;; (setq doom-theme 'doom-one-light)
+;; (setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-oceanic-next)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -84,14 +89,14 @@
 ;; You can specify one if you encounter the issue.
 (setq doom-modeline-project-detection 'project)
 ;; Please refer to https://github.com/bbatsov/projectile/issues/657.
-(setq doom-modeline-buffer-file-name-style 'truncate-all)
+(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
 
 ;; Whether display icons in mode-line. Respects `all-the-icons-color-icons'.
 ;; While using the server mode in GUI, should set the value explicitly.
 (setq doom-modeline-icon (display-graphic-p))
 
 ;; Whether display the icon for `major-mode'. Respects `doom-modeline-icon'.
-(setq doom-modeline-major-mode-icon t)
+(setq doom-modeline-major-mode-icon nil)
 
 ;; Whether display the colorful icon for `major-mode'.
 ;; Respects `doom-modeline-major-mode-icon'.
@@ -105,7 +110,7 @@
 (setq doom-modeline-buffer-modification-icon t)
 
 ;; Whether to use unicode as a fallback (instead of ASCII) when not using icons.
-(setq doom-modeline-unicode-fallback t)
+(setq doom-modeline-unicode-fallback nil)
 
 ;; Whether display the minor modes in mode-line.
 (setq doom-modeline-minor-modes nil)
@@ -141,9 +146,9 @@
 (setq doom-modeline-display-default-persp-name nil)
 
 ;; Whether display the `lsp' state. Non-nil to display in mode-line.
-(setq doom-modeline-lsp nil)
+(setq doom-modeline-lsp t)
 ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
-(setq doom-modeline-modal-icon nil)
+(setq doom-modeline-modal-icon t)
 
 ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
 (setq doom-modeline-mu4e nil)
@@ -286,12 +291,43 @@ _~_: modified
 (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
-;; Display Time
-(display-time-mode 1)
-(setq display-time-24hr-format t)
-
 ;; Lsp Performance Improvement
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024))
-(setq lsp-prefer-capf t)
 (setq lsp-ui-doc-enable nil)
+
+;; Company
+(setq company-lsp-async t)
+(setq company-lsp-enable-snippet t)
+(setq company-lsp-cache-candidates 'auto)
+
+
+;; Tide - Javascript
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; Angular Specifics
+(setq lsp-clients-angular-language-server-command
+  '("node"
+    "/usr/lib/node_modules/@angular/language-server"
+    "--ngProbeLocations"
+    "/usr/lib/node_modules"
+    "--tsProbeLocations"
+    "/usr/lib/node_modules"
+    "--stdio"))
+
+(remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation)
+(after! highlight-indentation
+  (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation))
+(after! python-mode
+  (remove-hook 'python-mode-hook #'highlight-indentation-mode))
+(add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
