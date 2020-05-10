@@ -24,8 +24,9 @@
 ;; (setq doom-theme 'doom-challenger-deep)
 ;; (setq doom-theme 'doom-material)
 ;; (setq doom-theme 'doom-one-light)
-;; (setq doom-theme 'doom-gruvbox)
-(setq doom-theme 'doom-oceanic-next)
+(setq doom-theme 'doom-gruvbox)
+;; (setq doom-theme 'doom-oceanic-next)
+;; (setq doom-theme 'doom-dark+)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -315,19 +316,22 @@ _~_: modified
   ;; `M-x package-install [ret] company`
   (company-mode +1))
 
-;; Angular Specifics
-(setq lsp-clients-angular-language-server-command
-  '("node"
-    "/usr/lib/node_modules/@angular/language-server"
-    "--ngProbeLocations"
-    "/usr/lib/node_modules"
-    "--tsProbeLocations"
-    "/usr/lib/node_modules"
-    "--stdio"))
-
 (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation)
 (after! highlight-indentation
   (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation))
 (after! python-mode
   (remove-hook 'python-mode-hook #'highlight-indentation-mode))
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
+
+;; ANgular Specifics
+(setq lsp-clients-angular-language-server-command
+  '("node"
+    "/usr/local/lib/node_modules/@angular/language-server"
+    "--ngProbeLocations"
+    "/usr/local/lib/node_modules"
+    "--tsProbeLocations"
+    "/usr/local/lib/node_modules"
+    "--stdio"))
+
+(setq fill-column 120)
+(setq-default fill-column 120)

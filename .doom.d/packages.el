@@ -43,3 +43,4 @@
 
 ;; Disable Packages
 (package! highlight-indentation :disable t)
+;; (package! hl-fill-column :disable t)
