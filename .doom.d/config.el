@@ -316,6 +316,9 @@ _~_: modified
   ;; `M-x package-install [ret] company`
   (company-mode +1))
 
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+(setq company-tooltip-align-annotations t)
+
 (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation)
 (after! highlight-indentation
   (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation))
