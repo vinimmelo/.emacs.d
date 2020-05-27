@@ -1,5 +1,5 @@
+(setq neo-smart-open t)
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-(setq projectile-switch-project-action 'neotree-projectile-action)
 (defun neotree-project-dir ()
   "Open NeoTree using the git root."
   (interactive)
