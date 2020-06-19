@@ -1,10 +1,10 @@
 (custom-set-variables
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
-(prelude-require-packages '(doom-modeline 
-                             doom-themes 
-                             ivy-posframe 
-                             dashboard 
+(prelude-require-packages '(doom-modeline
+                             doom-themes
+                             ivy-posframe
+                             dashboard
                              dashboard-hackernews
                              all-the-icons
                              all-the-icons-dired
@@ -24,6 +24,10 @@
                              amx
                              org-superstar
                              org-re-reveal
+                             ag
+                             counsel-projectile
+                             hc-zenburn-theme
+                             color-theme-sanityinc-tomorrow
                              all-the-icons-ibuffer))
 ;; Dashboard
 (require 'dashboard)
@@ -46,9 +50,6 @@
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
 (ivy-posframe-mode 1)
 
-(require 'ivy-rich)
-(ivy-rich-mode 1)
-
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
 ;; Remove auto save
@@ -58,7 +59,7 @@
 (defun no-junk-please-were-unixish ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
-      (set-buffer-file-coding-system 'unix))))
+      (set-buffer-file-coding-system 'utf-8-unix))))
 
 (add-hook 'find-file-hooks 'no-junk-please-were-unixish)
 
@@ -98,4 +99,43 @@
 
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+(setq all-the-icons-ivy-file-commands
+      '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir projectile-find-file
+                          projectile-find-dir projectile-completing-read))
+(setq buffer-file-name nil)
+
+;; Counsel configuration
+(require 'ivy-rich)
+(counsel-projectile-mode)
 (all-the-icons-ivy-setup)
+(all-the-icons-ivy-rich-mode 1)
+(ivy-rich-mode 1)
+
+;; Add maximized mode when open with emacsclient
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Prettier
+(add-hook 'web-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+
+;; Yasnippet
+(yas-global-mode 1)
+
+;; Multiple cursor
+(global-set-key (kbd "C-c m c") 'mc/edit-lines)
+(global-set-key (kbd "C-c m n") 'mc/mark-next-like-this-symbol)
+(global-set-key (kbd "C-c m p") 'mc/mark-previous-like-this-symbol)
+(global-set-key (kbd "C-c m b") 'mc/edit-beginnings-of-lines)
+(global-set-key (kbd "C-c m e") 'mc/edit-ends-of-lines)
+(global-set-key (kbd "C-c m m") 'mc/mark-next-like-this)
+
+;; Flyspell specifics
+(setq flyspell-issue-message-flag nil)
+
+;; Specifics when open emacs on emacsclient
+(if (< (length command-line-args) 2)
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+
+;; Redisplay specifics
+(setq redisplay-dont-pause t)
