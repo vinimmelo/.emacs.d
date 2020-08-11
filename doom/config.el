@@ -24,9 +24,10 @@
 ;; (setq doom-theme 'doom-challenger-deep)
 ;; (setq doom-theme 'doom-material)
 ;; (setq doom-theme 'doom-one-light)
-(setq doom-theme 'doom-gruvbox)
+;; (setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme 'doom-oceanic-next)
 ;; (setq doom-theme 'doom-dark+)
+(setq doom-theme 'doom-monokai-spectrum)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -46,7 +47,7 @@
 
 ;; Set Font
 ;; (setq doom-font (font-spec :family "Hack" :size 16))
-(setq doom-font (font-spec :family "JetBrains Mono" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 14))
 
 (custom-set-variables
  '(org-directory "~/Documents")
@@ -330,23 +331,7 @@ _~_: modified
 (setq company-tooltip-align-annotations t)
 
 ;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-
-(eval-after-load 'js-mode
-  '(add-hook 'js-mode-hook #'add-node-modules-path))
-;; Prettier
-(eval-after-load 'web-mode
-    '(progn
-       (add-hook 'web-mode-hook #'add-node-modules-path)
-       (add-hook 'web-mode-hook #'prettier-js-mode)))
-
-(eval-after-load 'typescript-mode
-    '(progn
-       (add-hook 'web-mode-hook #'add-node-modules-path)
-       (add-hook 'web-mode-hook #'prettier-js-mode)))
+;; Magit gravatars
+(setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))

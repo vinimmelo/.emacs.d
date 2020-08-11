@@ -26,6 +26,7 @@
 (package! treemacs-projectile)
 (package! tide)
 (package! add-node-modules-path)
+(package! yaml-mode)
 (package! wttrin :recipe (:host github :repo "bcbcarl/emacs-wttrin"))
 
 ;; Disable Packages
