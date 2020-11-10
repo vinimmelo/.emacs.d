@@ -10,8 +10,8 @@
 (map! "C-s" #'swiper-isearch)
 
 ;; Python config
-(setq elpy-rpc-python-command "python")
-(elpy-enable)
+;; (setq elpy-rpc-python-command "python")
+;; (elpy-enable)
 
 ;; Org Config
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -26,8 +26,8 @@
 ;; (setq doom-theme 'doom-one-light)
 ;; (setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme 'doom-oceanic-next)
-;; (setq doom-theme 'doom-dark+)
-(setq doom-theme 'doom-monokai-spectrum)
+;; (setq doom-theme 'doom-monokai-classic)
+(setq doom-theme 'doom-tomorrow-night)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -43,7 +43,7 @@
 (map! "C-c ." #'avy-goto-char)
 
 
-(setq elpy-rpc-virtualenv-path 'current)
+;; (setq elpy-rpc-virtualenv-path 'current)
 
 ;; Set Font
 ;; (setq doom-font (font-spec :family "Hack" :size 16))
@@ -54,15 +54,6 @@
  '(org-agenda-files (list org-directory)))
 
 (map! "C-j" #'emmet-expand-line)
-
-(autoload 'tern-mode "tern.el" nil t)
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-
-(eval-after-load 'tern
-   '(progn
-      (require 'tern-auto-complete)
-      (tern-ac-setup)))
-(setenv "PATH" (concat "/usr/bin:" (getenv "PATH")))
 
 ;; Set neotree theme
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
@@ -299,7 +290,7 @@ _~_: modified
   (remove-hook 'highlight-indentation-mode-hook #'doom|init-highlight-indentation))
 (after! python-mode
   (remove-hook 'python-mode-hook #'highlight-indentation-mode))
-(add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
+;; (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 
 ;; ANgular Specifics
 (setq lsp-clients-angular-language-server-command
@@ -335,3 +326,10 @@ _~_: modified
 
 ;; Magit gravatars
 (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+
+;; Doom typescript magic
+(after! dtrt-indent
+  (add-to-list 'dtrt-indent-hook-mapping-list '(typescript-mode javascript typescript-indent-level)))
+(require 'keychain-environment)
+(keychain-refresh-environment)
+(exec-path-from-shell-initialize)

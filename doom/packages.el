@@ -8,7 +8,7 @@
 (package! all-the-icons)
 (package! avy)
 (package! company-lsp)
-(package! elpy)
+;; (package! elpy)
 (package! emmet-mode)
 (package! flymake-jslint)
 (package! go)
@@ -28,6 +28,12 @@
 (package! add-node-modules-path)
 (package! yaml-mode)
 (package! wttrin :recipe (:host github :repo "bcbcarl/emacs-wttrin"))
+(package! keychain-environment)
+(package! rinari)
+(package! rvm)
+(package! exec-path-from-shell)
+(package! tern)
+
 
 ;; Disable Packages
 (package! highlight-indentation :disable t)
