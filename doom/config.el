@@ -27,7 +27,8 @@
 ;; (setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme 'doom-oceanic-next)
 ;; (setq doom-theme 'doom-monokai-classic)
-(setq doom-theme 'doom-tomorrow-night)
+;; (setq doom-theme 'doom-zenburn)
+(setq doom-theme 'doom-zenburn)
 
 (require 'powerline)
 (show-paren-mode t)
@@ -41,9 +42,6 @@
 (map! [f5] #'avy-goto-char-2)
 (map! "C-c ;" #'avy-goto-char-2)
 (map! "C-c ." #'avy-goto-char)
-
-
-;; (setq elpy-rpc-virtualenv-path 'current)
 
 ;; Set Font
 ;; (setq doom-font (font-spec :family "Hack" :size 16))
@@ -155,9 +153,6 @@
 ;; Hooks
 (after! doom-themes
   (remove-hook 'doom-load-theme-hook #'doom-themes-neotree-config))
-
-;; Fix undo tree problems with cache
-(global-undo-tree-mode -1)
 
 ;; Always use dired
 (map! "C-x C-d" #'dired)
@@ -333,3 +328,14 @@ _~_: modified
 (require 'keychain-environment)
 (keychain-refresh-environment)
 (exec-path-from-shell-initialize)
+(sp-local-pair 'emacs-lisp-mode "{" nil :post-handlers '(:add my-add-space-after-sexp-˓→insertion))
+(sp-local-pair 'emacs-lisp-mode "(" nil :post-handlers '(:add my-add-space-after-sexp-˓→insertion))
+(sp-local-pair 'emacs-lisp-mode "[" nil :post-handlers '(:add my-add-space-after-sexp-˓→insertion))
+
+(defun my-add-space-after-sexp-insertion (id action _context)
+  (when (eq action 'insert)
+    (save-excursion
+      (forward-char (length (plist-get (sp-get-pair id) :close)))
+      (when (or(eq (char-syntax (following-char)) ?w)
+               (looking-at (sp--get-opening-regexp)))
+        (insert " ")))))

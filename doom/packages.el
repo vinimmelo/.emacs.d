@@ -33,6 +33,8 @@
 (package! rvm)
 (package! exec-path-from-shell)
 (package! tern)
+(package! hc-zenburn-theme)
+(package! zenburn-theme)
 
 
 ;; Disable Packages
