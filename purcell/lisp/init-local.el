@@ -328,10 +328,12 @@
 
 
 ;; Personal Config
-(load-theme 'kaolin-galaxy)
+(load-theme 'doom-zenburn)
+(setq doom-zenburn-brighter-comments t)
+(setq doom-zenburn-brighter-modeline t)
 
 ;; (set-frame-font "JetBrains Mono Medium 11" nil t)
-(set-face-attribute 'default nil :font "JetBrains Mono Medium" :height 110)
+(set-face-attribute 'default nil :font "Hack" :height 110)
 
 ;; Keybindings
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?c ?v ?b ?n ?m ?r ?t ?u ?i ?o))
