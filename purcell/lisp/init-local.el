@@ -341,6 +341,7 @@
 (global-set-key (kbd "C-x .") 'find-file-at-point)
 (global-set-key (kbd "C-x C-d") 'dired)
 (global-set-key (kbd "C-c /") 'counsel-projectile-find-file)
+(global-unset-key (kbd "C-`"))
 ;; Font size
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C-+") 'text-scale-increase)
