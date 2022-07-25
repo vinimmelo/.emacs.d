@@ -11,6 +11,9 @@
   :ensure
   :bind ([f8] . treemacs))
 
+(use-package zenburn-theme
+  :ensure)
+
 (use-package treemacs-evil
   :ensure
   :after (treemacs evil))
@@ -44,9 +47,19 @@
   :hook ((go-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration)
          (js2-mode . lsp-deferred)
+         (typescript-mode . lsp-deferred)
          (web-mode . lsp-deferred)
-         (ruby-mode . lsp-deferred))
+         (ruby-mode . lsp-deferred)
+         (vue-mode . lsp-deferred))
   :commands (lsp lsp-deferred))
+
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-log-io nil)
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-ui-doc-delay 2))
 
 (use-package ace-jump-mode
   :ensure t
@@ -102,6 +115,10 @@
   (evil-global-set-key 'normal "s" 'avy-goto-char-2)
   (evil-global-set-key 'normal "S" 'avy-goto-char-2)
   (evil-ex-define-cmd "bd[elete]" 'kill-buffer)
+  (evil-global-set-key 'normal (kbd "C-w C-l") 'evil-window-right)
+  (evil-global-set-key 'normal (kbd "C-w C-h") 'evil-window-left)
+  (evil-global-set-key 'normal (kbd "C-w C-k") 'evil-window-up)
+  (evil-global-set-key 'normal (kbd "C-w C-j") 'evil-window-bottom)
   (evil-global-set-key 'normal (kbd "C-u") 'evil-scroll-up)
   (evil-global-set-key 'normal (kbd "<leader>k") 'counsel-ag)
   (evil-global-set-key 'normal (kbd "<leader>d") 'dired)
@@ -113,6 +130,7 @@
   (evil-global-set-key 'normal (kbd "<leader>w") 'evil-window-map)
   (evil-global-set-key 'normal (kbd "<leader>B") 'switch-to-buffer-other-window)
   (evil-global-set-key 'normal (kbd "<leader>g") 'magit-status)
+  (evil-global-set-key 'normal (kbd "<leader>t") 'term)
   (evil-global-set-key 'normal (kbd "C-e") 'end-of-line)
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state))
@@ -260,11 +278,38 @@
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)
    ("\\.jst.ejs\\'" . web-mode)
-   ("\\.html?\\'" . web-mode))
+   ("\\.js\\'" . web-mode)
+   ("\\.jsx\\'" . web-mode)
+   ("\\.ts\\'" . web-mode)
+   ("\\.tsx\\'" . web-mode)
+   ("\\.html\\'" . web-mode))
   :config
   (setq web-mode-engines-alist
         '(("django" . "focus/.*\\.html\\'")
-          ("ctemplate" . "realtimecrm/.*\\.html\\'"))))
+          ("ctemplate" . "realtimecrm/.*\\.html\\'")))
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2))
+
+(use-package tide
+  :ensure t
+  :config
+  (tide-setup)
+  (company-mode +1)
+  (setq-default tide-user-preferences '(:importModuleSpecifierPreference "relative" :includeCompletionsForModuleExports t :includeCompletionsWithInsertText t :allowTextChangesInNewFiles t)))
+
+(use-package prettier-js
+  :ensure t
+  :after (web-mode)
+  :hook
+  (json-mode . prettier-js-mode)
+  (js-mode . prettier-js-mode)
+  (js2-mode . prettier-js-mode)
+  (web-mode . prettier-js-mode))
 
 
 (use-package js2-refactor
@@ -326,14 +371,18 @@
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   (ivy-rich-mode 1))
 
-
+(use-package vue-mode
+  :ensure t
+  :mode
+  (("\\.vue\\'" . vue-mode))
+  :hook (vue-mode . prettier-js-mode))
 ;; Personal Config
-(load-theme 'doom-zenburn)
-(setq doom-zenburn-brighter-comments t)
-(setq doom-zenburn-brighter-modeline t)
+(load-theme 'kaolin-shiva)
+;; (load-theme 'doom-zenburn)
 
-;; (set-frame-font "JetBrains Mono Medium 11" nil t)
-(set-face-attribute 'default nil :font "Hack" :height 110)
+;; (set-frame-font "JetBrains Mono Medium 9" nil t)
+(set-frame-font "Fira Mono 9" nil t)
+;; (set-face-attribute 'default nil :font "Fira Mono" :height 100)
 
 ;; Keybindings
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?c ?v ?b ?n ?m ?r ?t ?u ?i ?o))
@@ -341,7 +390,6 @@
 (global-set-key (kbd "C-x .") 'find-file-at-point)
 (global-set-key (kbd "C-x C-d") 'dired)
 (global-set-key (kbd "C-c /") 'counsel-projectile-find-file)
-(global-unset-key (kbd "C-`"))
 ;; Font size
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -377,6 +425,18 @@
 (add-hook 'js2-mode-hook (lambda ()
                            (add-hook 'before-save-hook (lambda () (delete-trailing-whitespace)))))
 
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+;; indent
+
+
+(setq js2-basic-offset 2)
+(setq js-indent-level 2)
+(setq typescript-indent-level 2)
+
+(setq lsp-disabled-clients '(jsts-ls html-ls))
+
 (setq projectile-enable-caching t)
 (setq projectile-indexing-method 'native)
 
@@ -386,6 +446,9 @@
 (define-key global-map (kbd "RET") 'newline)
 
 (with-eval-after-load 'go-mode
-  (define-key go-mode-map (kbd "C-c t") #'go-add-tags))
+  (define-key go-mode-map (kbd "C-c t") #'go-add-tags)
+  (define-key go-mode-map (kbd "C-c C-t") #'go-add-tags))
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (provide 'init-local)
