@@ -14,6 +14,9 @@
 (use-package zenburn-theme
   :ensure)
 
+(use-package catppuccin-theme
+  :ensure)
+
 (use-package treemacs-evil
   :ensure
   :after (treemacs evil))
@@ -50,8 +53,10 @@
          (typescript-mode . lsp-deferred)
          (web-mode . lsp-deferred)
          (ruby-mode . lsp-deferred)
-         (vue-mode . lsp-deferred))
-  :commands (lsp lsp-deferred))
+         (vue-mode . lsp-deferred)
+         (python-mode . lsp-deferred))
+  :commands (lsp lsp-deferred)
+  :config (setq lsp-pylsp-plugins-flake8-max-line-length 119))
 
 (use-package lsp-ui
   :ensure t
@@ -131,7 +136,10 @@
   (evil-global-set-key 'normal (kbd "<leader>B") 'switch-to-buffer-other-window)
   (evil-global-set-key 'normal (kbd "<leader>g") 'magit-status)
   (evil-global-set-key 'normal (kbd "<leader>t") 'term)
+  (evil-global-set-key 'normal (kbd "C-a") 'beginning-of-line)
   (evil-global-set-key 'normal (kbd "C-e") 'end-of-line)
+  (evil-global-set-key 'visual (kbd "C-a") 'beginning-of-line)
+  (evil-global-set-key 'visual (kbd "C-e") 'end-of-line)
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state))
 
@@ -341,6 +349,22 @@
 (use-package go-add-tags
   :ensure t)
 
+(use-package blacken
+  :ensure t
+  :after python
+  :hook (python-mode . blacken-mode))
+
+(use-package py-isort
+  :ensure t
+  :after python
+  :config
+  (add-hook 'before-save-hook 'py-isort-before-save))
+
+(use-package pyvenv
+  :ensure t
+  :after python
+  :hook (python-mode . pyvenv-mode))
+
 (use-package ivy
   :ensure t
   :defer 0.1
@@ -377,11 +401,13 @@
   (("\\.vue\\'" . vue-mode))
   :hook (vue-mode . prettier-js-mode))
 ;; Personal Config
-(load-theme 'kaolin-shiva)
-;; (load-theme 'doom-zenburn)
+;; (load-theme 'doom-dracula)
+;; (load-theme 'catppuccin-macchiato)
+(load-theme 'doom-tomorrow-night)
 
-;; (set-frame-font "JetBrains Mono Medium 9" nil t)
-(set-frame-font "Fira Mono 9" nil t)
+;; (set-frame-font "SpaceMono Nerd Font 9" nil t)
+(set-frame-font "JetBrains Mono Medium 9" nil t)
+;; (set-frame-font "Fira Mono 9" nil t)
 ;; (set-face-attribute 'default nil :font "Fira Mono" :height 100)
 
 ;; Keybindings
@@ -395,8 +421,8 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . maximized)))))
+;; (custom-set-variables
+;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 
 (setq wttrin-default-cities '("Florianopolis" "Sao Paulo" "Ribeirao Preto"))
@@ -429,11 +455,15 @@
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
 ;; indent
-
-
 (setq js2-basic-offset 2)
 (setq js-indent-level 2)
 (setq typescript-indent-level 2)
+;; fix python indent
+(defun always-do-indent (_char)
+  'do-indent)
+(defun my-python-mode-hook ()
+  (add-hook 'electric-indent-functions #'always-do-indent nil t))
+(add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (setq lsp-disabled-clients '(jsts-ls html-ls))
 
