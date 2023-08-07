@@ -51,7 +51,7 @@
          (lsp-mode . lsp-enable-which-key-integration)
          (js2-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
-         (web-mode . lsp-deferred)
+         ;; (web-mode . lsp-deferred)
          (ruby-mode . lsp-deferred)
          (vue-mode . lsp-deferred)
          (python-mode . lsp-deferred))
@@ -172,8 +172,26 @@
   :ensure
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (use-package polymode
   :ensure t)
+
+(use-package robe
+  :ensure t
+  :hook (ruby-mode . robe-mode))
+
+(use-package ruby-end
+  :ensure t)
+
+(use-package rubocop
+  :ensure t
+  :hook (ruby-mode . rubocop-mode)
+  :config
+  (setq rubocop-autocorrect-on-save t))
 
 (use-package poly-ruby
   :ensure t
@@ -185,7 +203,10 @@
   :after (polymode))
 
 (use-package rvm
-  :ensure t)
+  :ensure t
+  :config
+  (advice-add 'inf-ruby-console-auto :before #'rvm-activate-corresponding-ruby)
+  (rvm-use-default))
 
 (use-package org-superstar
   :ensure t
@@ -400,13 +421,16 @@
   :mode
   (("\\.vue\\'" . vue-mode))
   :hook (vue-mode . prettier-js-mode))
+
 ;; Personal Config
-;; (load-theme 'doom-dracula)
-;; (load-theme 'catppuccin-macchiato)
-(load-theme 'doom-tomorrow-night)
+;; (load-theme 'doom-zenburn)
+;; (load-theme 'sanityinc-tomorrow-eighties)
+;; (load-theme 'doom-ayu-mirage)
+(load-theme 'doom-old-hope)
+;; (setq catppuccin-flavor 'macchiato)
 
 ;; (set-frame-font "SpaceMono Nerd Font 9" nil t)
-(set-frame-font "JetBrains Mono Medium 9" nil t)
+(set-frame-font "JetBrains Mono Medium 10" nil t)
 ;; (set-frame-font "Fira Mono 9" nil t)
 ;; (set-face-attribute 'default nil :font "Fira Mono" :height 100)
 
@@ -420,10 +444,23 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+(define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
+(define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
+(define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
+(define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
 
 ;; (custom-set-variables
 ;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+(setq hl-todo-highlight-punctuation ":"
+      hl-todo-keyword-faces
+      `(("TODO"       warning bold)
+        ("FIXME"      error bold)
+        ("FIX"      error bold)
+        ("HACK"       font-lock-constant-face bold)
+        ("REVIEW"     font-lock-keyword-face bold)
+        ("NOTE"       success bold)
+        ("DEPRECATED" font-lock-doc-face bold)))
 
 (setq wttrin-default-cities '("Florianopolis" "Sao Paulo" "Ribeirao Preto"))
 
