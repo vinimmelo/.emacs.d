@@ -25,6 +25,9 @@
   :ensure
   :after (treemacs projectile))
 
+(use-package moe-theme
+  :ensure t)
+
 (use-package wttrin
   :ensure t
   :bind ([f9] . wttrin))
@@ -131,6 +134,7 @@
   (evil-global-set-key 'normal (kbd "<leader>f") 'find-file)
   (evil-global-set-key 'normal (kbd "<leader>b") 'switch-to-buffer)
   (evil-global-set-key 'normal (kbd "<leader>/") 'counsel-projectile-find-file)
+  (evil-global-set-key 'normal (kbd "<leader>s") 'counsel-projectile-ag)
   (evil-global-set-key 'normal (kbd "<leader>p") 'projectile-command-map)
   (evil-global-set-key 'normal (kbd "<leader>w") 'evil-window-map)
   (evil-global-set-key 'normal (kbd "<leader>B") 'switch-to-buffer-other-window)
@@ -316,10 +320,10 @@
   (setq web-mode-engines-alist
         '(("django" . "focus/.*\\.html\\'")
           ("ctemplate" . "realtimecrm/.*\\.html\\'")))
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
   :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  (web-mode-css-indent-offset 2)
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2))
@@ -422,16 +426,20 @@
   (("\\.vue\\'" . vue-mode))
   :hook (vue-mode . prettier-js-mode))
 
+(add-to-list 'custom-theme-load-path "/home/thelink/Dropbox/Themes/emacs/")
+
+
 ;; Personal Config
 ;; (load-theme 'doom-zenburn)
-;; (load-theme 'sanityinc-tomorrow-eighties)
+(load-theme 'dracula-pro-lincoln)
 ;; (load-theme 'doom-ayu-mirage)
-(load-theme 'doom-old-hope)
+;; (load-theme 'doom-ayu-mirage)
 ;; (setq catppuccin-flavor 'macchiato)
 
-;; (set-frame-font "SpaceMono Nerd Font 9" nil t)
-(set-frame-font "JetBrains Mono Medium 10" nil t)
-;; (set-frame-font "Fira Mono 9" nil t)
+
+;; (set-frame-font "JetBrains Mono Medium 9" nil t)
+;; (set-frame-font "Cascadia Mono 9" nil t)
+(set-frame-font "Cascadia Code 9" nil t)
 ;; (set-face-attribute 'default nil :font "Fira Mono" :height 100)
 
 ;; Keybindings
